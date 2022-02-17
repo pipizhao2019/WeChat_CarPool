@@ -53,3 +53,58 @@
 53.	    userInfo: null  
 54.	  }  
 55.	})  
+56.	//app.js  
+57.	  
+58.	var util = require("utils/util.js");  
+59.	  
+60.	App({  
+61.	  onLaunch: function () {  
+62.	    var that = this;  
+63.	      
+64.	    if (!wx.cloud) {  
+65.	      console.error('请使用 2.2.3 或以上的基础库以使用云能力')  
+66.	    } else {  
+67.	      wx.cloud.init({  
+68.	        traceUser: true,  
+69.	      })  
+70.	    }  
+71.	  
+72.	    // 获取用户 openid  
+73.	    wx.cloud.callFunction({  
+74.	      name: 'login',  
+75.	      success: res => {  
+76.	        console.log('res',res);  
+77.	            console.log('login res.result.openid',res.result.openid);  
+78.	            //获取到openId后进行其他操作  
+79.	            // 持久化存储openId  
+80.	            wx.setStorageSync('_openid',res.result.openid);  
+81.	          },  
+82.	          fail: err => {  
+83.	            console.error('err',err);  
+84.	          },  
+85.	    
+86.	      complete: res => {  
+87.	        that.globalData.openid = res.result.openid;  
+88.	      }  
+89.	    })  
+90.	  
+91.	    // 获取用户信息  
+92.	    wx.getUserInfo({  
+93.	      success: function (res) {  
+94.	        that.globalData.userInfo = res.userInfo  
+95.	      },  
+96.	      fail: function () {  
+97.	        wx.switchTab({  
+98.	          url: '/pages/my/index',  
+99.	        })  
+100.	        util.showMsg("请先授权登陆");  
+101.	        wx.hideTabBar();  
+102.	      }  
+103.	    })  
+104.	  },  
+105.	  
+106.	  globalData: {  
+107.	    openid: null,  
+108.	    userInfo: null  
+109.	  }  
+110.	})  
