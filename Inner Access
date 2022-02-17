@@ -1,0 +1,60 @@
+//1.	在云函数获取数据库的引用：
+	 const cloud = require('wx-server-sdk')  
+	cloud.init({  
+	  env: cloud.DYNAMIC_CURRENT_ENV  
+	})  
+	const db = cloud.database()  
+
+//2.	获取一条数据
+ const add = db.collection("todos").doc("ae7e55b35e78713e00241c7733c0004d").get({  
+	  success:res=>{  
+	    console.log(res)  
+	  }  
+	}); 
+//3.	插入数据
+	 db.collection('todos').add({  
+	      data: {  
+	        category: "xx",  
+	        name: "xx",  
+	        price: xx,  
+	        type:"xx"  
+	      }  
+	    })  	    
+      .then(res => {  
+	      console.log(res)  
+	    })  
+	    .catch(console.error)  
+//4.	读取多条数据
+	 const db = wx.cloud.database({  
+	     env:"test25"  
+	   });  
+	   const data = db.collection("todos").where({  
+	     _openid:"xxxxx",  
+     price:10  
+	   }).get({  
+	     success:function(res){  
+	       console.log(res)  
+     }  
+	   }) 
+//5.	删除数据
+	 const db = wx.cloud.database({  
+	  env:"test25"  
+	});  
+	  
+	db.collection("todos").doc("d7e7dede5e7874ca001ffe0620c9ff52").remove({  
+	  success:(res)=>{  
+	    console.log(res)  
+	    if(res.stats.removed===1){  	      
+    wx.showToast({  
+	        title: '删除成功！',  
+	        icon: 'success',  
+	        image: '',  
+	        duration: 2000,  
+	        mask: true,  
+        success: function(res) {},  
+	        fail: function(res) {},  
+        complete: function(res) {},        
+    })  
+    }  
+	  }  
+	})  
